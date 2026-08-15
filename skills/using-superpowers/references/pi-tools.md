@@ -1,25 +1,16 @@
 # Pi Tool Mapping
 
-Skills in this repo often mention Claude Code or OpenCode tool names.
-When you use them in pi, map them to pi's built-in behavior or the nearest equivalent.
+Skills speak in actions ("dispatch a subagent", "create a todo", "read a file"). On Pi these resolve to the tools below.
 
-| Skill references | Pi equivalent |
-|-----------------|---------------|
-| `Skill` tool | Use `/skill:name` or `read` the `SKILL.md` directly |
-| `Read`, `Write`, `Edit` | Pi built-in `read`, `write`, `edit` |
-| `Bash` | Pi built-in `bash` |
-| `Grep` | Pi built-in `grep` |
-| `Glob` or `find files` | Pi built-in `find` or `ls` |
-| `TodoWrite` | Use a `TODO.md` file or your own extension |
-| `Task` or subagent dispatch | No built-in equivalent. Use a pi extension, a second pi session, or execute the workflow inline |
+| Action skills request | Pi equivalent |
+| --- | --- |
+| Dispatch a subagent (`Subagent (general-purpose):` template) | Use an installed subagent tool such as `subagent` from `pi-subagents` if available |
+| Task tracking ("create a todo", "mark complete") | Use an installed todo/task tool if available, otherwise track tasks in the plan or `TODO.md` |
 
-## Important Gaps
+## Subagents
 
-- Pi does not ship built-in subagents.
-- Pi does not ship built-in todo tracking.
-- Pi loads skills via the Agent Skills standard and is lenient about unknown frontmatter fields.
+Pi core does not ship a standard subagent tool. The `pi-subagents` package is a strong optional companion and provides a `subagent` tool with single-agent, chain, parallel, async, forked-context, and resume/status workflows. If no subagent tool is available, do not fabricate `Task` calls; execute sequentially in the current session or explain that the optional subagent capability is not installed.
 
-## Practical Rule
+## Task lists
 
-If a skill depends on a harness feature pi does not provide, keep the skill content but adapt the execution method.
-Preserve the workflow intent even when the exact tool name changes.
+Pi core does not ship a standard task-list tool. If a todo/task extension is installed, use its documented tool. Otherwise use Superpowers plan files, checklists in Markdown, or a repo-local `TODO.md` for task tracking. Older Superpowers docs may refer to `TodoWrite`; treat that as the task-tracking action above.
