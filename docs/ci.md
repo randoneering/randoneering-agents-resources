@@ -31,7 +31,7 @@ Mirror `git@tangled.org:did:plc:.../randoneering-agents-resources.git` to a GitH
 
 **GitHub side** (the mirror repo's settings):
 - Secret `TANGLED_SSH_KEY` — same key.
-- Variable `TANGLED_REPO_SSH_URL` — the SSH URL of the tangled repo, e.g. `git@tangled.org:did:plc:xxxxxxxx/repo.git`.
+- Variable `TANGLED_REPO_SSH_URL` — the SSH URL of the tangled repo, e.g. `git@tangled.org:did:plc:pvlqg4ky7fg57nwomjvbpiap`. No repo path suffix — the DID identifies the repo.
 
 ### 3. Make sure the SSH key is trusted
 
