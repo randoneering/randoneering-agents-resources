@@ -45,7 +45,8 @@ jobs:
           mkdir -p ~/.ssh
           printf '%s\n' "${TANGLED_SSH_KEY}" > ~/.ssh/id_tangled
           chmod 600 ~/.ssh/id_tangled
-          printf 'StrictHostKeyChecking=no\n' >> ~/.ssh/config
+          printf 'StrictHostKeyChecking=no\nIdentitiesOnly=yes\n' >> ~/.ssh/config
+          eval "$(ssh-agent -s)"
           ssh-add ~/.ssh/id_tangled
           git clone "${TANGLED_REPO_SSH_URL}" /tmp/repo
           cd /tmp/repo
