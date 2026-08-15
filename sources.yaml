@@ -1,0 +1,246 @@
+# Skill source manifest
+#
+# Each entry maps a local skill directory to its upstream source repository.
+# The weekly sync script (scripts/sync-skills.py) reads this file, fetches each
+# upstream, and opens a PR with the proposed updates.
+#
+# Schema:
+#   path:           local skill directory, relative to repo root
+#   local:          true = no upstream, never synced (custom or local-only skill)
+#   repo:           upstream git URL (https://github.com/<owner>/<name>)
+#   upstream_path:  path within the upstream repo (defaults to `path`)
+#   ref:            upstream git ref to track (defaults to `main`)
+#   license:        SPDX license identifier of the upstream skill
+#   notes:          free-form notes shown in the PR description
+
+sources:
+
+  # -----------------------------------------------------------------------
+  # obra/superpowers — process & methodology skills
+  # https://github.com/obra/superpowers/tree/main/skills
+  # -----------------------------------------------------------------------
+  - path: skills/brainstorming
+    repo: https://github.com/obra/superpowers
+    upstream_path: skills/brainstorming
+    license: MIT
+    notes: "Core methodology skill"
+  - path: skills/writing-plans
+    repo: https://github.com/obra/superpowers
+    upstream_path: skills/writing-plans
+    license: MIT
+  - path: skills/executing-plans
+    repo: https://github.com/obra/superpowers
+    upstream_path: skills/executing-plans
+    license: MIT
+  - path: skills/test-driven-development
+    repo: https://github.com/obra/superpowers
+    upstream_path: skills/test-driven-development
+    license: MIT
+  - path: skills/subagent-driven-development
+    repo: https://github.com/obra/superpowers
+    upstream_path: skills/subagent-driven-development
+    license: MIT
+  - path: skills/dispatching-parallel-agents
+    repo: https://github.com/obra/superpowers
+    upstream_path: skills/dispatching-parallel-agents
+    license: MIT
+  - path: skills/using-git-worktrees
+    repo: https://github.com/obra/superpowers
+    upstream_path: skills/using-git-worktrees
+    license: MIT
+  - path: skills/finishing-a-development-branch
+    repo: https://github.com/obra/superpowers
+    upstream_path: skills/finishing-a-development-branch
+    license: MIT
+  - path: skills/systematic-debugging
+    repo: https://github.com/obra/superpowers
+    upstream_path: skills/systematic-debugging
+    license: MIT
+  - path: skills/verification-before-completion
+    repo: https://github.com/obra/superpowers
+    upstream_path: skills/verification-before-completion
+    license: MIT
+  - path: skills/requesting-code-review
+    repo: https://github.com/obra/superpowers
+    upstream_path: skills/requesting-code-review
+    license: MIT
+  - path: skills/receiving-code-review
+    repo: https://github.com/obra/superpowers
+    upstream_path: skills/receiving-code-review
+    license: MIT
+  - path: skills/writing-skills
+    repo: https://github.com/obra/superpowers
+    upstream_path: skills/writing-skills
+    license: MIT
+  - path: skills/using-superpowers
+    repo: https://github.com/obra/superpowers
+    upstream_path: skills/using-superpowers
+    license: MIT
+
+  # -----------------------------------------------------------------------
+  # Jeffallan/claude-skills — domain-specialist agent skills
+  # https://github.com/Jeffallan/claude-skills/tree/main/skills
+  # Local skill folders carry an `author: https://github.com/Jeffallan`
+  # frontmatter entry confirming attribution.
+  # -----------------------------------------------------------------------
+  - path: skills/api-designer
+    repo: https://github.com/Jeffallan/claude-skills
+    upstream_path: skills/api-designer
+    license: MIT
+  - path: skills/cli-developer
+    repo: https://github.com/Jeffallan/claude-skills
+    upstream_path: skills/cli-developer
+    license: MIT
+  - path: skills/cloud-architect
+    repo: https://github.com/Jeffallan/claude-skills
+    upstream_path: skills/cloud-architect
+    license: MIT
+  - path: skills/code-documenter
+    repo: https://github.com/Jeffallan/claude-skills
+    upstream_path: skills/code-documenter
+    license: MIT
+  - path: skills/database-optimizer
+    repo: https://github.com/Jeffallan/claude-skills
+    upstream_path: skills/database-optimizer
+    license: MIT
+  - path: skills/devops-engineer
+    repo: https://github.com/Jeffallan/claude-skills
+    upstream_path: skills/devops-engineer
+    license: MIT
+  - path: skills/golang-pro
+    repo: https://github.com/Jeffallan/claude-skills
+    upstream_path: skills/golang-pro
+    license: MIT
+  - path: skills/kubernetes-specialist
+    repo: https://github.com/Jeffallan/claude-skills
+    upstream_path: skills/kubernetes-specialist
+    license: MIT
+  - path: skills/postgres-pro
+    repo: https://github.com/Jeffallan/claude-skills
+    upstream_path: skills/postgres-pro
+    license: MIT
+  - path: skills/python-pro
+    repo: https://github.com/Jeffallan/claude-skills
+    upstream_path: skills/python-pro
+    license: MIT
+  - path: skills/rust-engineer
+    repo: https://github.com/Jeffallan/claude-skills
+    upstream_path: skills/rust-engineer
+    license: MIT
+  - path: skills/terraform-engineer
+    repo: https://github.com/Jeffallan/claude-skills
+    upstream_path: skills/terraform-engineer
+    license: MIT
+
+  # -----------------------------------------------------------------------
+  # cloudflare/skills — Cloudflare platform skills
+  # https://github.com/cloudflare/skills/tree/main/skills
+  # Only skills that exist 1:1 in upstream are mapped; renamed/local
+  # siblings stay `local: true`.
+  # -----------------------------------------------------------------------
+  - path: skills/cloudflare/agents-sdk
+    repo: https://github.com/cloudflare/skills
+    upstream_path: skills/agents-sdk
+    license: MIT
+  - path: skills/cloudflare/cloudflare
+    repo: https://github.com/cloudflare/skills
+    upstream_path: skills/cloudflare
+    license: MIT
+  - path: skills/cloudflare/durable-objects
+    repo: https://github.com/cloudflare/skills
+    upstream_path: skills/durable-objects
+    license: MIT
+  - path: skills/cloudflare/web-perf
+    repo: https://github.com/cloudflare/skills
+    upstream_path: skills/web-perf
+    license: MIT
+  - path: skills/cloudflare/workers-best-practices
+    repo: https://github.com/cloudflare/skills
+    upstream_path: skills/workers-best-practices
+    license: MIT
+  - path: skills/cloudflare/wrangler
+    repo: https://github.com/cloudflare/skills
+    upstream_path: skills/wrangler
+    license: MIT
+
+  # -----------------------------------------------------------------------
+  # ClickHouse/clickhouse-claude-code-plugin
+  # https://github.com/ClickHouse/clickhouse-claude-code-plugin/tree/main/skills
+  # -----------------------------------------------------------------------
+  - path: skills/clickhouse/clickhouse-best-practices
+    repo: https://github.com/ClickHouse/clickhouse-claude-code-plugin
+    upstream_path: skills/clickhouse-best-practices
+    license: Apache-2.0
+
+  # =======================================================================
+  # Local skills — no upstream. Never synced.
+  # =======================================================================
+  - path: skills/bro
+    local: true
+    notes: "Custom audio/transcription skills — local-only"
+  - path: skills/damage-control
+    local: true
+    notes: "Custom safety/scope guardrails for this repo"
+  - path: skills/documentation-writing
+    local: true
+    notes: "Custom writing conventions for this repo"
+  - path: skills/nix
+    local: true
+    notes: "Custom Nix packaging conventions"
+  - path: skills/python/api-script
+    local: true
+    notes: "Project-specific REST API script template"
+  - path: skills/python/python-workflow
+    local: true
+    notes: "Custom Python workflow for this repo (uv + ruff + mypy)"
+  - path: skills/resume-tailor
+    local: true
+    notes: "Custom resume-tailoring skill"
+  - path: skills/sentry
+    local: true
+    notes: "Custom Sentry-integration skills"
+  - path: skills/snowflake
+    local: true
+    notes: "Custom Snowflake skills — upstream attribution not yet identified"
+  - path: skills/typescript
+    local: true
+    notes: "Custom TypeScript ecosystem skills — upstream attribution not yet identified"
+  - path: skills/writing-style
+    local: true
+    notes: "Custom prose style guide for this repo"
+  - path: skills/automation
+    local: true
+    notes: "Custom automation conventions"
+  - path: skills/dbt
+    local: true
+    notes: "Source not confirmed — dbt-mcp only ships one skill; our dbt/ skills likely came from another repo"
+  - path: skills/hashicorp
+    local: true
+    notes: "Source not confirmed — possibly from hashicorp/internal or community"
+  - path: skills/neon
+    local: true
+    notes: "Source not confirmed"
+  - path: skills/postgres
+    local: true
+    notes: "Local Postgres conventions"
+  - path: skills/clickhouse/clickhousectl-cloud-deploy
+    local: true
+    notes: "Local variant — upstream only ships clickhouse-best-practices"
+  - path: skills/clickhouse/clickhousectl-local-dev
+    local: true
+    notes: "Local variant — upstream only ships clickhouse-best-practices"
+  - path: skills/cloudflare/building-ai-agent-on-cloudflare
+    local: true
+    notes: "Local variant — not in cloudflare/skills upstream"
+  - path: skills/cloudflare/building-mcp-server-on-cloudflare
+    local: true
+    notes: "Local variant — not in cloudflare/skills upstream"
+  - path: skills/cloudflare/sandbox-sdk
+    local: true
+    notes: "Local variant — upstream has sandbox-stable/sandbox-next instead"
+
+# TODO: identify sources for remaining skill folders:
+#   skills/automation, skills/hashicorp, skills/neon, skills/clickhouse/{2 variants},
+#   skills/cloudflare/{3 variants}, skills/snowflake, skills/typescript
+# When identified, move them out of the `local: true` block above into a
+# proper `repo:` entry.

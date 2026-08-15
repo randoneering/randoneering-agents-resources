@@ -1,0 +1,67 @@
+# Tangled CI workflow: weekly skill sync
+#
+# Triggered by:
+#   - `push` to the `sync-scheduler` branch (driven by an external cron
+#     such as GitHub Actions — see `.github/workflows/weekly-sync.yaml`)
+#   - `pull_request` against `main` (so changes to sources.yaml are
+#     validated before merge)
+#   - `manual` (run on demand from tangled.app)
+#
+# Reads sources.yaml and pushes a `sync/<date>` branch with the changes.
+# Per the AGENTS.md damage-control rules, it does NOT auto-merge — the
+# PR is opened and you merge it.
+#
+# Requires the secret `TANGLED_SSH_KEY` (an SSH key with write access to
+# the repo) to be configured in the repo's tangled.app settings.
+#
+# See: docs.tangled.org/spindles.html for the workflow spec.
+
+when:
+  # ponytail: `event` must be a list per the Tangled spec. The
+  # `sync-scheduler` branch is pushed by `.github/workflows/weekly-sync.yaml`
+  # in a GitHub mirror of this repo, on a weekly cron.
+  - event: ["push"]
+    branch: ["sync-scheduler"]
+  # PRs against main: validate sources.yaml and run a dry-run, no push.
+  - event: ["pull_request"]
+    branch: ["main"]
+  # Manual run from the tangled.app UI (always allowed).
+  - event: ["manual"]
+
+engine: nixery
+dependencies:
+  - python311
+  - git
+  - openssh
+  - pyyaml
+
+clone:
+  depth: 1
+
+steps:
+  - name: Validate sources.yaml
+    command: |
+      python -c "import yaml; yaml.safe_load(open('sources.yaml')); print('sources.yaml parses')"
+
+  - name: Dry-run sync (always)
+    command: |
+      python scripts/sync-skills.py --dry-run
+
+  - name: Apply sync and push branch
+    # ponytail: only push when the trigger was the scheduler branch or a
+    # manual run. PRs stop at the dry-run above.
+    command: |
+      set -euo pipefail
+      case "${TANGLED_PIPELINE_KIND:-manual}" in
+        push|manual) ;;
+        *) echo "skip push: pipeline kind is ${TANGLED_PIPELINE_KIND}"; exit 0 ;;
+      esac
+      git config user.name "tangled-ci"
+      git config user.email "ci@tangled.org"
+      mkdir -p ~/.ssh
+      printf '%s\n' "${TANGLED_SSH_KEY}" > ~/.ssh/id_ed25519
+      chmod 600 ~/.ssh/id_ed25519
+      eval "$(ssh-agent -s)"
+      ssh-add ~/.ssh/id_ed25519
+      printf 'StrictHostKeyChecking=no\n' >> ~/.ssh/config
+      python scripts/sync-skills.py
