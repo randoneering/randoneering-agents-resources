@@ -1,0 +1,54 @@
+# Weekly cron that pokes the Tangled CI sync workflow.
+#
+# Tangled CI (docs.tangled.org/spindles.html) has no native cron trigger,
+# so we drive it from GitHub Actions. Each week this workflow:
+#
+#   1. Checks out a small GitHub mirror of this repo (you'll need to
+#      set up the mirror — see `docs/ci.md`).
+#   2. Pushes an empty commit to the `sync-scheduler` branch on tangled.
+#   3. Tangled's `sync-skills` workflow fires on that push and opens a
+#      PR with upstream changes (or no-ops if nothing changed).
+#
+# Required secrets in the GitHub mirror repo:
+#   TANGLED_SSH_KEY       — SSH key with write access to the tangled repo
+#
+# Required vars:
+#   TANGLED_REPO_SSH_URL  — e.g. git@tangled.org:did:plc:xxxxxxxx/repo.git
+#
+# ponytail: cron + a single git push is intentionally the whole job. If
+# you need richer scheduling, swap this for cron-job.org pointing at a
+# Tangled manual-trigger URL.
+
+name: Weekly skill sync trigger
+
+on:
+  schedule:
+    # Every Sunday at 06:00 UTC. Adjust as needed.
+    - cron: "0 6 * * 0"
+  workflow_dispatch:  # manual run from GitHub UI
+
+jobs:
+  poke-tangled:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Push empty commit to sync-scheduler on tangled
+        env:
+          TANGLED_SSH_KEY: ${{ secrets.TANGLED_SSH_KEY }}
+          TANGLED_REPO_SSH_URL: ${{ vars.TANGLED_REPO_SSH_URL }}
+        run: |
+          set -euo pipefail
+          if [ -z "${TANGLED_REPO_SSH_URL:-}" ]; then
+            echo "TANGLED_REPO_SSH_URL repo variable is not set" >&2
+            exit 1
+          fi
+          mkdir -p ~/.ssh
+          printf '%s\n' "${TANGLED_SSH_KEY}" > ~/.ssh/id_tangled
+          chmod 600 ~/.ssh/id_tangled
+          printf 'StrictHostKeyChecking=no\n' >> ~/.ssh/config
+          ssh-add ~/.ssh/id_tangled
+          git clone "${TANGLED_REPO_SSH_URL}" /tmp/repo
+          cd /tmp/repo
+          git checkout -B sync-scheduler origin/main
+          git commit --allow-empty -m "ci: weekly skill sync trigger"
+          git push -u origin sync-scheduler
